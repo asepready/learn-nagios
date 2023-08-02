@@ -1,0 +1,1 @@
+copi /plugin/* to /usr/local/nagios/libexec/

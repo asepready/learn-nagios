@@ -86,7 +86,7 @@ sed -i '/name.*generic-service/a\        use                             service
 
 ################################################################################
 # Solution
-nano /usr/local/pnp4nagios/share/application/models/data.php
+vi /usr/local/pnp4nagios/share/application/models/data.php
 
 # Default line number: 979
 Change from
@@ -97,7 +97,7 @@ To
    if(is_array($pages)&&sizeof($pages) > 0){
 
 ### Solution
-nano /usr/local/pnp4nagios/share/application/lib/json.php
+vi /usr/local/pnp4nagios/share/application/lib/json.php
 
 From
 class Services_JSON

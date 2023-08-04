@@ -1,10 +1,10 @@
 ## Install NTP Packages
 ```sh
 yum -y update 
-yum -y install ntp 
+yum -y install -y ntp yum-utils
 ```
 ## Configure NTP Servers
-nano /etc/ntp.conf
+vi /etc/ntp.conf
 ```sh
 ....
 #server 0.centos.pool.ntp.org iburst

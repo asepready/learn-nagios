@@ -7,6 +7,7 @@ yum install git net-snmp* -y
 yum install 'perl(Net::SNMP)' -y
 
 cd /tmp
-git clone https://github.com/SteScho/manubulon-snmp.git
-cd manubulon-snmp/plugins/
+wget https://github.com/SteScho/manubulon-snmp/archive/refs/tags/v2.1.0.tar.gz
+tar xzf v2.1.0.tar.gz
+cd manubulon-snmp-2.1.0/
 chmod 777 *

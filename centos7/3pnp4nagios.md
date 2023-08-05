@@ -1,24 +1,24 @@
 ```sh
 # Prerequisites
-yum install -y rrdtool perl-rrdtool perl-Time-HiRes php-gd
+yum install -y rrdtool perl-rrdtool perl-Time-HiRes php-gd php-xml
 
 # Downloading the Source
 cd /tmp
-wget -O pnp4nagios.tar.gz https://github.com/lingej/pnp4nagios/archive/refs/tags/0.6.26.tar.gz
+wget -O pnp4nagios.tar.gz https://github.com/lingej/pnp4nagios/archive/0.6.26.tar.gz
 tar xzf pnp4nagios.tar.gz
 
 # Compile & Install
 cd pnp4nagios-0.6.26
 ./configure --with-rrdtool=/usr/bin/rrdtool --with-nagios-user=nagios --with-nagios-group=nagios
 make all
-make install
+make fullinstall
 make install-webconf
 make install-config
 make install-init
  
 # Configure & Start Service / Daemon
 systemctl daemon-reload
-systemctl enable npcd.service
+/sbin/chkconfig npcd on
 systemctl start npcd.service
 systemctl restart httpd.service
 
@@ -86,7 +86,7 @@ sed -i '/name.*generic-service/a\        use                             service
 
 ################################################################################
 # Solution
-nano /usr/local/pnp4nagios/share/application/models/data.php
+vi /usr/local/pnp4nagios/share/application/models/data.php
 
 # Default line number: 979
 Change from
@@ -95,9 +95,10 @@ if(sizeof($pages) > 0 ){
 To
 /*if(sizeof($pages) > 0 ){*/
    if(is_array($pages)&&sizeof($pages) > 0){
+   
 
 ### Solution
-nano /usr/local/pnp4nagios/share/application/lib/json.php
+vi /usr/local/pnp4nagios/share/application/lib/json.php
 
 From
 class Services_JSON

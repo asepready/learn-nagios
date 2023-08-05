@@ -7,28 +7,24 @@ cat /etc/selinux/config
 setenforce 0
 
 # Prerequisites
-yum install -y epel-release 
-yum repolist
 yum install -y wget gcc glibc glibc-common unzip httpd mod_ssl gd gd-devel perl postfix
 yum install -y openssl-devel 
 
 yum install -y php php-imap php-opcache php-devel php-gd php-ldap php-mbstring php-pdo php-pdo-dblib php-mysqlnd php-pgsql php-pear php-pecl-ssh2 php-pgsql php-process php-snmp php-xml php-odbc php-imagick
 
-## Create Nagios user and group
-groupadd nagcmd
-groupadd nagios
-useradd -g nagios -G nagcmd nagios
-usermod -a -G nagios apache
-
 # Downloading the Source
 cd /tmp
-wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.13.tar.gz
+wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.14.tar.gz
 tar xzf nagioscore.tar.gz
 
 # Compile
-cd /tmp/nagioscore-nagios-4.4.13/
+cd /tmp/nagioscore-nagios-4.4.14/
 ./configure --with-command-group=nagcmd
 make all
+
+# Create User And Group
+make install-groups-users
+usermod -a -G nagios apache
  
 # Install Binaries
 make install
@@ -67,11 +63,11 @@ yum install -y 'perl(Net::SNMP)'
 
 # Downloading The Source
 cd /tmp
-wget --no-check-certificate -O nagios-plugins.tar.gz https://github.com/nagios-plugins/nagios-plugins/archive/release-2.4.4.tar.gz
+wget --no-check-certificate -O nagios-plugins.tar.gz https://github.com/nagios-plugins/nagios-plugins/archive/release-2.4.6.tar.gz
 tar zxf nagios-plugins.tar.gz
 
 # Compile + Install
-cd /tmp/nagios-plugins-release-2.4.4/
+cd /tmp/nagios-plugins-release-2.4.6/
 ./tools/setup --with-nagios-user=nagios --with-nagios-group=nagcmd
 ./configure --with-nagios-user=nagios --with-nagios-group=nagcmd
 make
@@ -85,10 +81,24 @@ echo "/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg" > /usr/b
 chmod 777 /bin/verifynagios
 verifynagios
 
+## fix permision
+## Create Nagios user and group
+groupadd nagcmd
+usermod -G nagcmd nagios
+usermod -G nagcmd apache
+
+chown nagios:nagcmd /usr/local/nagios/var/rw 
+chown nagios:nagcmd /usr/local/nagios/var/rw/nagios.cmd
+
 # HTTPD Config add lines /etc/httpd/conf/httpd.conf
-#Enable SSL
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+echo '' >> /etc/httpd/conf/httpd.conf
+echo '#Enable SSL' >> /etc/httpd/conf/httpd.conf
+echo 'RewriteEngine On' >> /etc/httpd/conf/httpd.conf
+echo 'RewriteCond %{HTTPS} off' >> /etc/httpd/conf/httpd.conf
+echo 'RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}' >> /etc/httpd/conf/httpd.conf
+
 
 #Enable SSL Nagios
+sed -i 's/#  SSLRequireSSL/  SSLRequireSSL/g' /etc/httpd/conf.d/nagios.conf
+
+ln -s /usr/local/nagios/share/* /var/www/html/

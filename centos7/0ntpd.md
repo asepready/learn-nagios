@@ -1,10 +1,13 @@
 ## Install NTP Packages
 ```sh
-yum -y update 
-yum -y install ntp 
+yum install epel-release yum-utils
+yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum-config-manager --enable remi-php73
+yum install -y ntp
+
 ```
 ## Configure NTP Servers
-nano /etc/ntp.conf
+vi /etc/ntp.conf
 ```sh
 ....
 #server 0.centos.pool.ntp.org iburst

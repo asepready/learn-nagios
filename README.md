@@ -27,36 +27,34 @@ virt-install --name netmon \
   --virt-type kvm --memory 4096 --vcpus 8 \
   --boot hd,menu=on \
   --disk path=/home/$USER/kvm/netmon.qcow2,device=disk \
-  --cdrom=/home/$USER/kvm/CentOS-7-x86_64-Minimal-2009.iso \
+  --cdrom=/home/$USER/kvm/CentOS-7-x86_64-Everything-2009.iso \
   --graphics spice \
   --os-type Linux --os-variant centos7
-
-
 #
 qemu-img convert -c \
-/home/$USER/kvm/centos.qcow2 -O qcow2 \
-/home/$USER/kvm/centos7.qcow2
+/home/$USER/kvm/centos7.qcow2 -O qcow2 \
+/home/$USER/kvm/nagioscore.qcow2
 ```
 
 - FreeBSD 11
 ```sh
 # Create Image Disk
 qemu-img create -f qcow2 \
-/home/$USER/kvm/freebsd11.qcow2 \
+/home/$USER/kvm/fbsd.qcow2 \
 128G
 
 # 
-virt-install --name freebsd11 \
+virt-install --name fbsd \
   --virt-type kvm --memory 4096 --vcpus 8 \
   --boot hd,menu=on \
-  --disk path=/home/$USER/kvm/freebsd11.qcow2,device=disk \
-  --cdrom=/home/$USER/kvm/FreeBSD-11.4-RELEASE-amd64-disc1.iso \
+  --disk path=/home/$USER/kvm/fbsd.qcow2,device=disk \
+  --cdrom=/home/$USER/kvm/FreeBSD-12.4-STABLE-amd64-20230608-r373095-disc1.iso \
   --graphics spice \
-  --os-type Linux --os-variant freebsd11.4
+  --os-type Linux --os-variant fbsd11.4
 
 #
 qemu-img convert -c \
-/home/$USER/kvm/freebsd11.qcow2 -O qcow2 \
+/home/$USER/kvm/fbsd.qcow2 -O qcow2 \
 /home/$USER/kvm/fnagios.qcow2
 ```
 

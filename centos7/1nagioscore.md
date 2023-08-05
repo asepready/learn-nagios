@@ -7,20 +7,10 @@ cat /etc/selinux/config
 setenforce 0
 
 # Prerequisites
-yum install -y epel-release 
-yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-yum-config-manager ––enable remi–php72
-yum repolist
 yum install -y wget gcc glibc glibc-common unzip httpd mod_ssl gd gd-devel perl postfix
 yum install -y openssl-devel 
 
 yum install -y php php-imap php-opcache php-devel php-gd php-ldap php-mbstring php-pdo php-pdo-dblib php-mysqlnd php-pgsql php-pear php-pecl-ssh2 php-pgsql php-process php-snmp php-xml php-odbc php-imagick
-
-## Create Nagios user and group
-groupadd nagcmd
-groupadd nagios
-useradd -g nagios -G nagcmd nagios
-usermod -a -G nagios apache
 
 # Downloading the Source
 cd /tmp
@@ -31,6 +21,10 @@ tar xzf nagioscore.tar.gz
 cd /tmp/nagioscore-nagios-4.4.14/
 ./configure --with-command-group=nagcmd
 make all
+
+# Create User And Group
+make install-groups-users
+usermod -a -G nagios apache
  
 # Install Binaries
 make install
@@ -88,6 +82,11 @@ chmod 777 /bin/verifynagios
 verifynagios
 
 ## fix permision
+## Create Nagios user and group
+groupadd nagcmd
+usermod -G nagcmd nagios
+usermod -G nagcmd apache
+
 chown nagios:nagcmd /usr/local/nagios/var/rw 
 chown nagios:nagcmd /usr/local/nagios/var/rw/nagios.cmd
 

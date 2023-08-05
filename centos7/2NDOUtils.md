@@ -3,7 +3,7 @@
 yum install -y mariadb mariadb-server mariadb-devel
 
 # If you use a version of MySQL < 5.7 or MariaDB < 10.2, the following server options must be set:
-# add lines on file mysql-clients.cnf and server.cnf
+# vi /etc/my.cnf.d/server.cnf
 [mysqld]
 innodb_file_format=barracuda
 innodb_file_per_table=1

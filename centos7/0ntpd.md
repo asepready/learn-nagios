@@ -1,7 +1,10 @@
 ## Install NTP Packages
 ```sh
-portsnap fetch update && portupgrade -a
-yum -y install -y ntp yum-utils
+yum install epel-release yum-utils
+yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum-config-manager --enable remi-php73
+yum install -y ntp
+
 ```
 ## Configure NTP Servers
 vi /etc/ntp.conf

@@ -2,12 +2,18 @@
 # Prerequisites
 yum install -y rrdtool perl-rrdtool perl-Time-HiRes php-gd php-xml
 
+cd /tmp
+wget -O mrtg.tar.gz --no-check-certificate https://oss.oetiker.ch/mrtg/pub/mrtg-2.17.10.tar.gz
+tar xzf mrtg.tar.gz
+cd mrtg-2.17.10/
+./configure --with-rrdtool=/usr/bin/rrdtool --with-nagios-user=nagios --with-nagios-group=nagios
+make 
+make install
+
 # Downloading the Source
 cd /tmp
 wget -O pnp4nagios.tar.gz https://github.com/lingej/pnp4nagios/archive/0.6.26.tar.gz
 tar xzf pnp4nagios.tar.gz
-
-# Compile & Install
 cd pnp4nagios-0.6.26
 ./configure --with-rrdtool=/usr/bin/rrdtool --with-nagios-user=nagios --with-nagios-group=nagios
 make all

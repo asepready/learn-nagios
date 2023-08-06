@@ -12,6 +12,15 @@ yum install -y openssl-devel
 
 yum install -y php php-imap php-opcache php-devel php-gd php-ldap php-mbstring php-pdo php-pdo-dblib php-mysqlnd php-pgsql php-pear php-pecl-ssh2 php-pgsql php-process php-snmp php-xml php-odbc php-imagick
 
+## fix permision
+## Create Nagios user and group
+groupadd nagcmd
+usermod -G nagcmd nagios
+usermod -G nagcmd apache
+
+chown nagios:nagcmd /usr/local/nagios/var/rw 
+chown nagios:nagcmd /usr/local/nagios/var/rw/nagios.cmd
+
 # Downloading the Source
 cd /tmp
 wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.14.tar.gz
@@ -73,6 +82,16 @@ cd /tmp/nagios-plugins-release-2.4.6/
 make
 make install
  
+
+#########################################################################################
+# SNMP INTERFACE
+# http://nagios.manubulon.com/
+cd /tmp
+wget https://github.com/SteScho/manubulon-snmp/archive/refs/tags/v2.1.0.tar.gz
+tar xzf v2.1.0.tar.gz
+cd manubulon-snmp-2.1.0/
+chmod 777 *
+
 # Service / Daemon Commands
 systemctl restart nagios.service && systemctl status nagios.service
 
@@ -80,15 +99,6 @@ systemctl restart nagios.service && systemctl status nagios.service
 echo "/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg" > /usr/bin/verifynagios
 chmod 777 /bin/verifynagios
 verifynagios
-
-## fix permision
-## Create Nagios user and group
-groupadd nagcmd
-usermod -G nagcmd nagios
-usermod -G nagcmd apache
-
-chown nagios:nagcmd /usr/local/nagios/var/rw 
-chown nagios:nagcmd /usr/local/nagios/var/rw/nagios.cmd
 
 # HTTPD Config add lines /etc/httpd/conf/httpd.conf
 echo '' >> /etc/httpd/conf/httpd.conf

@@ -18,9 +18,6 @@ groupadd nagcmd
 usermod -G nagcmd nagios
 usermod -G nagcmd apache
 
-chown nagios:nagcmd /usr/local/nagios/var/rw 
-chown nagios:nagcmd /usr/local/nagios/var/rw/nagios.cmd
-
 # Downloading the Source
 cd /tmp
 wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.14.tar.gz
@@ -77,9 +74,9 @@ tar zxf nagios-plugins.tar.gz
 
 # Compile + Install
 cd /tmp/nagios-plugins-release-2.4.6/
-./tools/setup --with-nagios-user=nagios --with-nagios-group=nagcmd
-./configure --with-nagios-user=nagios --with-nagios-group=nagcmd
-make
+./tools/setup
+./configure --prefix=/usr/local/nagios --with-cgiurl=/nagios/cgi-bin
+make all
 make install
  
 

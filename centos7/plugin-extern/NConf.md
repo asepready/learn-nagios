@@ -27,9 +27,9 @@ chmod 0644 /usr/local/nagios/etc/resource.cfg
 systemctl restart httpd
 
 ## Database Configuration
-mysql -u root -p'vnSPHmEqPcOPe9yr' -e"create database nconf;CREATE USER 'nconf'@'localhost' IDENTIFIED BY 'QUtdZCpwUs4OkQF6a8';GRANT ALL PRIVILEGES ON nconf.* TO 'nconf'@localhost IDENTIFIED BY 'QUtdZCpwUs4OkQF6a8';flush privileges;"
+mysql -u root -p'learndb' -e"create database nconf;CREATE USER 'nconf'@'localhost' IDENTIFIED BY 'QUtdZCpwUs4OkQF6a8';GRANT ALL PRIVILEGES ON nconf.* TO 'nconf'@localhost IDENTIFIED BY 'QUtdZCpwUs4OkQF6a8';flush privileges;"
 
-mysql -u root -p'vnSPHmEqPcOPe9yr' nconf < INSTALL_/create_database.sql
+mysql -u root -p'learndb' nconf < INSTALL_/create_database.sql
 
 # Run this command to ensure that the database has been created:
 echo 'show databases;' | mysql -u nconf -p'QUtdZCpwUs4OkQF6a8' -h localhost
@@ -39,6 +39,8 @@ echo 'show databases;' | mysql -u nconf -p'QUtdZCpwUs4OkQF6a8' -h localhost
 # Finished
 rm -rf INSTALL* UPDATE*
 
+ln -s /usr/local/nagios/bin/nagios /usr/local/nagios/share/nconf/bin/nagios
+
 # configure the deployment.ini file
 cp /usr/local/nagios/share/nconf/config/deployment.ini /usr/local/nagios/share/nconf/config/deployment.ini.ori
 echo "[extract config]" >> /usr/local/nagios/share/nconf/config/deployment.ini
@@ -47,6 +49,7 @@ echo "type = local" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "source_file = \"/usr/local/nagios/share/nconf/output/NagiosConfig.tgz\"" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "target_file = \"/tmp/\"" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "action = extract" >> /usr/local/nagios/share/nconf/config/deployment.ini
+
 echo "" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "[copy collector config]" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "" >> /usr/local/nagios/share/nconf/config/deployment.ini
@@ -54,6 +57,7 @@ echo "type = local" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "source_file = \"/tmp/Default_collector/\"" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "target_file = \"/usr/local/nagios/etc/Default_collector/\"" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "action = copy" >> /usr/local/nagios/share/nconf/config/deployment.ini
+
 echo "" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "[copy global config]" >> /usr/local/nagios/share/nconf/config/deployment.ini
 echo "" >> /usr/local/nagios/share/nconf/config/deployment.ini
@@ -79,12 +83,14 @@ echo "NAGIOS_DIR=\"/usr/local/nagios/\"" >> /usr/local/nagios/share/nconf/ADD-ON
 echo "TEMP_DIR=${NAGIOS_DIR}\"import/\"" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "CONF_ARCHIVE=\"NagiosConfig.tgz\" " >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
+
 echo "if [ ! -e \${TEMP_DIR} ] ; then" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "mkdir -p \${TEMP_DIR}" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "fi" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "if [ \${OUTPUT_DIR}\${CONF_ARCHIVE} -nt \${TEMP_DIR}${CONF_ARCHIVE} ] ; then" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "cp -p \${OUTPUT_DIR}\${CONF_ARCHIVE} \${TEMP_DIR}\${CONF_ARCHIVE}" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
+
 echo "tar -xf \${TEMP_DIR}\${CONF_ARCHIVE} -C \${NAGIOS_DIR}" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "systemctl restart nagios" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh
 echo "fi" >> /usr/local/nagios/share/nconf/ADD-ONS/deploy_local.sh

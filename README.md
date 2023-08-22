@@ -57,5 +57,3 @@ qemu-img convert -c \
 /home/$USER/kvm/fbsd.qcow2 -O qcow2 \
 /home/$USER/kvm/fnagios.qcow2
 ```
-
-

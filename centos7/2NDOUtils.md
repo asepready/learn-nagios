@@ -38,7 +38,7 @@ echo 'show databases;' | mysql -u ndoutils -p'ndoudbbase' -h localhost
  
 # Linux Kernel Settings
 # First create a backup copy of the /etc/sysctl.conf file:
-cp /etc/sysctl.conf /opt/sysctl.conf.orig
+cp /etc/sysctl.conf /etc/sysctl.conf.sample
 
 # Now make the required changes:
 sed -i '/msgmnb/d' /etc/sysctl.conf
@@ -92,7 +92,5 @@ grep ndo /usr/local/nagios/var/nagios.log
 echo 'select * from nagios.nagios_logentries;' | mysql -u ndoutils -p'ndoudbbase'
 
 # Service Commands
-systemctl start ndo2db.service
-systemctl stop ndo2db.service
-systemctl restart ndo2db.service
-systemctl status ndo2db.service
+systemctl start ndo2db.service && systemctl stop ndo2db.service
+systemctl restart ndo2db.service && systemctl status ndo2db.service

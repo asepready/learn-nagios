@@ -1,6 +1,27 @@
 ```sh
+#
+cat > /etc/resolv.conf <<EOF
+nameserver 10.0.0.254
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+EOF
+
+#
+cat > /etc/network/interfaces.d/ens4<<EOF
+# The primary network interface
+auto ens4
+iface ens4 inet static
+   address 10.0.0.11
+   netmask 255.255.255.0
+   gateway 10.0.0.254
+#   dns-domain google.com
+#   dns-nameservers 10.0.0.254 8.8.8.8 8.8.4.4
+
+EOF
+
 # Download SNMP on Debian 10
-apt install network-manager
+#apt install network-manager
 apt install snmpd snmp libsnmp-dev
 apt install ufw
 
@@ -19,7 +40,8 @@ systemctl enable snmpd && systemctl start snmpd && systemctl status snmpd
 sudo systemctl enable ufw && sudo systemctl start ufw
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow 161/udp 5666/tcp
+sudo ufw allow 161/udp
+sudo ufw allow 5666/tcp
 sudo ufw show added
 sudo ufw enable
 
@@ -30,7 +52,7 @@ net-snmp-config --create-snmpv3-user -ro -A authpass -X privpass -a MD5 -x DES p
 systemctl start snmpd
 snmpwalk -v3 -a MD5 -A authpass -x DES -X privpass -l authPriv -u public localhost
 ## test
-snmpwalk -v3 -a MD5 -A authpass -x DES -X privpass -l authPriv -u public localhost
+snmpwalk -v3 -a MD5 -A authpass -x DES -X privpass -l authPriv -u public localhost -o sysDescr.0
 snmpwalk -v3 -a MD5 -A YUkVXTnIBBlGvOeU -x DES -X dcyoioisdjRalrUN -l authPriv -u public localhost
 
 # Download and Install Nagios Plugins

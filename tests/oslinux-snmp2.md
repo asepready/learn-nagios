@@ -26,3 +26,5 @@ Output: ens33:UP:1 UP: OK
 
 ./check_snmp_int.pl -H 10.0.0.2 -C public -n ens3 -k -w 200,400 -c 500,600
 Output:ens33:UP (0.1KBps/0.0KBps):1 UP: OK
+
+./check_mrtg_2 /tmp/mrtg/127.0.0.1.log

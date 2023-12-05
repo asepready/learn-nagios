@@ -1,0 +1,1 @@
+1. [Install Nagios XI Rocky 9](https://www.golinuxcloud.com/install-nagios-xi/)(https://www.golinuxcloud.com/install-nagios-xi/)

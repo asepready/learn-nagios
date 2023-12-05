@@ -1,1 +1,0 @@
-[Yowsup Under Nagios](https://www.unixmen.com/send-nagios-alert-notification-using-whatsapp/)(https://www.unixmen.com/send-nagios-alert-notification-using-whatsapp/)

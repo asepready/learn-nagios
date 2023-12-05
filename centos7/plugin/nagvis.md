@@ -1,15 +1,14 @@
 ```sh
 yum install -y dnf-plugins-core
 yum install -y epel-release
-dnf repolist
-dnf config-manager --set-enabled PowerTools
+yum repolist
+yum-config-manager enabled PowerTools
 yum install -y rrdtool-devel boost boost-thread boost-devel sqlite libstdc++* libstdc++-static php-gd php-gettext php-mbstring php-session php-json php-pdo php-mysqlnd rsync gcc-c++ graphviz libsqlite3x.*
 touch /usr/local/nagios/var/rw/live
 chown nagios:apache /usr/local/nagios/var/rw/live
 
-
 # Upgrade C++
-yum install centos-release-scl
+yum install -y centos-release-scl
 yum install devtoolset-7-gcc-c++ --enablerepo='centos-sclo-rh'
 scl enable devtoolset-7 'bash'
 which gcc
